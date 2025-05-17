@@ -3,7 +3,7 @@ from bs4 import BeautifulSoup
 import requests
 from langchain.chat_models import ChatOpenAI
 from langchain.chains.question_answering import load_qa_chain
-from langchain_community.document_loaders import Document
+from langchain.docstore.document import Document
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 import os
 
