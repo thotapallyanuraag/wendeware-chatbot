@@ -6,6 +6,7 @@ from langchain.chains.question_answering import load_qa_chain
 from langchain.docstore.document import Document
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 import os
+import openai
 
 # Load OpenAI API key from secrets
 api_key = st.secrets["OPENAI_API_KEY"]
