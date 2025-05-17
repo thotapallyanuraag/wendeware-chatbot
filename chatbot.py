@@ -3,17 +3,11 @@ from bs4 import BeautifulSoup
 import requests
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.docstore.document import Document
-from openai import OpenAI
 import os
+import json
 
 # Load API key from Streamlit secrets
 api_key = st.secrets["OPENAI_API_KEY"]
-
-# Initialize NVIDIA OpenAI-compatible client
-client = OpenAI(
-    base_url="https://integrate.api.nvidia.com/v1",
-    api_key=api_key
-)
 
 # Wendeware URLs
 URLS = [
@@ -64,21 +58,36 @@ if question:
     docs = splitter.split_documents(documents)
     context = "\n\n".join([doc.page_content for doc in docs])[:3000]  # Limit context
 
-    # Call NVIDIA-hosted LLM
-    completion = client.chat.completions.create(
-        model="thudm/chatglm3-6b",
-        messages=[
+    # Create request payload for NVIDIA API
+    payload = {
+        "model": "thudm/chatglm3-6b",
+        "messages": [
             {"role": "system", "content": "Beantworte die Frage formal basierend auf dem bereitgestellten Text."},
             {"role": "user", "content": f"Kontext: {context}\n\nFrage: {question}"}
         ],
-        temperature=0.5,
-        top_p=1,
-        max_tokens=1024,
-        stream=False
-    )
+        "temperature": 0.5,
+        "top_p": 1,
+        "max_tokens": 1024,
+        "stream": False
+    }
 
-    answer = completion.choices[0].message.content
-    st.success(answer)
+    headers = {
+        "Authorization": f"Bearer {api_key}",
+        "Content-Type": "application/json"
+    }
+
+    try:
+        response = requests.post(
+            url="https://integrate.api.nvidia.com/v1/chat/completions",
+            headers=headers,
+            data=json.dumps(payload)
+        )
+        response.raise_for_status()
+        result = response.json()
+        answer = result['choices'][0]['message']['content']
+        st.success(answer)
+    except Exception as e:
+        st.error(f"Fehler bei der Anfrage: {e}")
 
 
 
