@@ -7,6 +7,7 @@ except LookupError:
     nltk.download('punkt', download_dir='/tmp/nltk_data')
     nltk.download('wordnet', download_dir='/tmp/nltk_data')
     os.environ['NLTK_DATA'] = '/tmp/nltk_data'
+    nltk.data.path.append('/tmp/nltk_data')
 
 from nltk.stem import WordNetLemmatizer
 lemmatizer = WordNetLemmatizer()
