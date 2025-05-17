@@ -1,6 +1,6 @@
 streamlit
-nltk
-tensorflow
-keras
-numpy
-spaCy
+beautifulsoup4
+requests
+openai
+langchain
+tiktoken
