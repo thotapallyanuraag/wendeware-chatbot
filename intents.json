@@ -1,0 +1,31 @@
+
+
+{
+  "intents": [
+    {
+      "tag": "amperix_technical",
+      "patterns": ["What is Amperix?", "How does Amperix work?", "Amperix features"],
+      "responses": ["Amperix is an energy management system that helps optimize energy consumption and reduce costs.", "Amperix works by monitoring and controlling energy usage in real-time, providing insights and automation to improve energy efficiency."]
+    },
+    {
+      "tag": "wendeware_info",
+      "patterns": ["What is Wendeware?", "About Wendeware", "Wendeware company"],
+      "responses": ["Wendeware is a company that specializes in energy management solutions, including Amperix.", "Wendeware provides innovative solutions for energy management, focusing on efficiency and sustainability."]
+    },
+    {
+      "tag": "customer_support",
+      "patterns": ["I have a problem with Amperix", "How do I use Amperix?", "Amperix support"],
+      "responses": ["Please describe your issue with Amperix, and we'll do our best to assist you.", "You can find documentation and guides for Amperix on our website."]
+    },
+    {
+      "tag": "greeting",
+      "patterns": ["Hello", "Hi", "Hey"],
+      "responses": ["Hello! How can I assist you today?", "Hi! Welcome to Wendeware's chatbot."]
+    },
+    {
+      "tag": "goodbye",
+      "patterns": ["Thank you", "Bye", "See you later"],
+      "responses": ["You're welcome! Have a great day.", "Goodbye! Feel free to reach out if you have any more questions."]
+    }
+  ]
+}
