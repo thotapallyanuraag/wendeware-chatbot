@@ -2,5 +2,6 @@ streamlit
 beautifulsoup4
 requests
 openai
-langchain
+langchain==0.1.14
+langchain-community==0.0.21
 tiktoken
