@@ -1,13 +1,11 @@
 import nltk
-import os
 
 try:
     nltk.data.find('tokenizers/punkt')
+    nltk.data.find('corpora/wordnet')
 except LookupError:
-    nltk.download('punkt', download_dir='/tmp/nltk_data')
-    nltk.download('wordnet', download_dir='/tmp/nltk_data')
-    os.environ['NLTK_DATA'] = '/tmp/nltk_data'
-    nltk.data.path.append('/tmp/nltk_data')
+    nltk.download('punkt')
+    nltk.download('wordnet')
 
 from nltk.stem import WordNetLemmatizer
 lemmatizer = WordNetLemmatizer()
