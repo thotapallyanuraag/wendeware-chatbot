@@ -3,14 +3,15 @@ from bs4 import BeautifulSoup
 import requests
 from langchain.chat_models import ChatOpenAI
 from langchain.chains.question_answering import load_qa_chain
-from langchain.docstore.document import Document
+from langchain_community.document_loaders import Document
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 import os
 
-# Set OpenAI API key
-os.environ["OPENAI_API_KEY"] = "your-openai-api-key"
+# Load OpenAI API key from secrets
+api_key = st.secrets["OPENAI_API_KEY"]
+os.environ["OPENAI_API_KEY"] = api_key
 
-# List of Wendeware URLs
+# Wendeware URLs
 URLS = [
     "https://www.wendeware.com/",
     "https://www.wendeware.com/amperix-energiemanagementsystem",
@@ -29,7 +30,7 @@ URLS = [
     "https://www.wendeware.com/kompatibilitaetsliste"
 ]
 
-# Function to scrape and extract text from URL
+# Scrape website content
 def fetch_website_text(url):
     try:
         res = requests.get(url)
@@ -39,33 +40,25 @@ def fetch_website_text(url):
     except:
         return ""
 
-# Load documents
-@st.cache_data(show_spinner=False)
+@st.cache_data
 def load_documents():
-    documents = []
+    docs = []
     for url in URLS:
         text = fetch_website_text(url)
         if text:
-            documents.append(Document(page_content=text, metadata={"source": url}))
-    return documents
+            docs.append(Document(page_content=text, metadata={"source": url}))
+    return docs
 
-# Streamlit UI
+# UI
 st.title("🔌 Wendeware Support Chatbot")
 st.write("Bitte stellen Sie Ihre Frage. Der Bot antwortet formal basierend auf offiziellen Wendeware-Inhalten.")
+question = st.text_input("Ihre Frage:")
 
-user_input = st.text_input("Ihre Frage eingeben:")
-
-documents = load_documents()
-
-if user_input:
-    # Split documents
+if question:
+    documents = load_documents()
     splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
     docs = splitter.split_documents(documents)
-
-    # Load LLM and QA chain
     llm = ChatOpenAI(temperature=0)
     chain = load_qa_chain(llm, chain_type="stuff")
-
-    # Get response
-    response = chain.run(input_documents=docs, question=user_input)
-    st.markdown(f"**Antwort:** {response}")
+    answer = chain.run(input_documents=docs, question=question)
+    st.success(answer)
