@@ -80,4 +80,4 @@ def bow(sentence, words):
 
 def predict_class(sentence, model):
     p = bow(sentence, words)
-    res = model.predict(np.array([p]))[0
+    res = model.predict(np.array([p]))[0]
