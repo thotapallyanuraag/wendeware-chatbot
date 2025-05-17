@@ -1,5 +1,6 @@
 import nltk
-
+nltk.download('punkt', quiet=True)
+nltk.download('wordnet', quiet=True)
 try:
     nltk.data.find('tokenizers/punkt')
     nltk.data.find('corpora/wordnet')
