@@ -52,9 +52,9 @@ if "chat_history" not in st.session_state:
     st.session_state.chat_history = []
 
 st.title("💬 Wendeware Chat Support")
-st.markdown("Stellen Sie Ihre Fragen zum Amperix-System. Ich beantworte sie auf Basis der offiziellen Wendeware-Webseiten.")
+st.markdown("Ask anything about the Amperix system. Answers are based on official Wendeware website content.")
 
-user_input = st.chat_input("Ihre Nachricht eingeben…")
+user_input = st.chat_input("Type your message…")
 
 if user_input:
     st.session_state.chat_history.append({"role": "user", "content": user_input})
@@ -65,11 +65,11 @@ if user_input:
     context = "\n\n".join([doc.page_content for doc in docs])[:3000]  # Limit context
 
     # Build message history for conversation
-    messages = [{"role": "system", "content": "Beantworte die Fragen formal basierend auf dem bereitgestellten Text."}]
+    messages = [{"role": "system", "content": "Answer the questions formally based on the provided context."}]
     for msg in st.session_state.chat_history:
         messages.append({"role": msg["role"], "content": msg["content"]})
 
-    messages[-1]["content"] = f"Kontext: {context}\n\nFrage: {user_input}"
+    messages[-1]["content"] = f"Context: {context}\n\nQuestion: {user_input}"
 
     payload = {
         "model": "meta/llama3-8b-instruct",
@@ -96,7 +96,7 @@ if user_input:
         answer = result['choices'][0]['message']['content']
         st.session_state.chat_history.append({"role": "assistant", "content": answer})
     except Exception as e:
-        st.session_state.chat_history.append({"role": "assistant", "content": f"Fehler bei der Anfrage: {e}"})
+        st.session_state.chat_history.append({"role": "assistant", "content": f"Request error: {e}"})
 
 # Display conversation
 for msg in st.session_state.chat_history:
@@ -104,6 +104,7 @@ for msg in st.session_state.chat_history:
         st.chat_message("user").markdown(msg["content"])
     else:
         st.chat_message("assistant").markdown(msg["content"])
+
 
 
 
